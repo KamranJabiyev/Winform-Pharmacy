@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PharmacyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Drugs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+    <Property Name="Price" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="DrugCount" Type="int" />
+    <Property Name="TypeId" Type="int" />
+    <Property Name="Deleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DrugTypes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+    <Property Name="Deleted" Type="bit" />
+  </EntityType>
+  <EntityType Name="Employees">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="255" />
+    <Property Name="IsAdmin" Type="bit" Nullable="false" />
+    <Property Name="Confirmed" Type="bit" Nullable="false" />
+    <Property Name="Deleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Sales">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Time" Type="date" />
+    <Property Name="Total" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="EmployeeId" Type="int" />
+  </EntityType>
+  <EntityType Name="SellDrug">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SaleId" Type="int" />
+    <Property Name="DrugId" Type="int" />
+    <Property Name="DrugCount" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Pharmacy.dbo.GetSales' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="GetSales">
+    <Key>
+      <PropertyRef Name="Invoice" />
+      <PropertyRef Name="Name" />
+      <PropertyRef Name="Email" />
+    </Key>
+    <Property Name="Invoice" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Total" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Time" Type="date" />
+  </EntityType>
+  <Association Name="FK__Drugs__TypeId__286302EC">
+    <End Role="DrugTypes" Type="Self.DrugTypes" Multiplicity="0..1" />
+    <End Role="Drugs" Type="Self.Drugs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DrugTypes">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Drugs">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Sales__EmployeeI__3C69FB99">
+    <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+    <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employees">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Sales">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SellDrug__DrugId__403A8C7D">
+    <End Role="Drugs" Type="Self.Drugs" Multiplicity="0..1" />
+    <End Role="SellDrug" Type="Self.SellDrug" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Drugs">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SellDrug">
+        <PropertyRef Name="DrugId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SellDrug__SaleId__3F466844">
+    <End Role="Sales" Type="Self.Sales" Multiplicity="0..1" />
+    <End Role="SellDrug" Type="Self.SellDrug" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sales">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SellDrug">
+        <PropertyRef Name="SaleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PharmacyModelStoreContainer">
+    <EntitySet Name="Drugs" EntityType="Self.Drugs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DrugTypes" EntityType="Self.DrugTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SellDrug" EntityType="Self.SellDrug" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GetSales" EntityType="Self.GetSales" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [GetSales].[Invoice] AS [Invoice], 
+    [GetSales].[Name] AS [Name], 
+    [GetSales].[Email] AS [Email], 
+    [GetSales].[Total] AS [Total], 
+    [GetSales].[Time] AS [Time]
+    FROM [dbo].[GetSales] AS [GetSales]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__Drugs__TypeId__286302EC" Association="Self.FK__Drugs__TypeId__286302EC">
+      <End Role="DrugTypes" EntitySet="DrugTypes" />
+      <End Role="Drugs" EntitySet="Drugs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Sales__EmployeeI__3C69FB99" Association="Self.FK__Sales__EmployeeI__3C69FB99">
+      <End Role="Employees" EntitySet="Employees" />
+      <End Role="Sales" EntitySet="Sales" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SellDrug__DrugId__403A8C7D" Association="Self.FK__SellDrug__DrugId__403A8C7D">
+      <End Role="Drugs" EntitySet="Drugs" />
+      <End Role="SellDrug" EntitySet="SellDrug" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SellDrug__SaleId__3F466844" Association="Self.FK__SellDrug__SaleId__3F466844">
+      <End Role="Sales" EntitySet="Sales" />
+      <End Role="SellDrug" EntitySet="SellDrug" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

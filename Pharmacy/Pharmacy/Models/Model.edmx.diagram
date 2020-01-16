@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f000bd47ace546ff81aa96a6613427d7" Name="Diagram1">
+        <EntityTypeShape EntityType="PharmacyModel.Drug" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PharmacyModel.DrugType" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <AssociationConnector Association="PharmacyModel.FK__Drugs__TypeId__286302EC" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PharmacyModel.Employee" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PharmacyModel.Sale" Width="1.5" PointX="3" PointY="5.125" />
+        <EntityTypeShape EntityType="PharmacyModel.SellDrug" Width="1.5" PointX="5.25" PointY="1.125" />
+        <AssociationConnector Association="PharmacyModel.FK__SellDrug__DrugId__403A8C7D" />
+        <AssociationConnector Association="PharmacyModel.FK__Sales__EmployeeI__3C69FB99" />
+        <AssociationConnector Association="PharmacyModel.FK__SellDrug__SaleId__3F466844" />
+        <EntityTypeShape EntityType="PharmacyModel.GetSale" Width="1.5" PointX="5.75" PointY="4.5" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

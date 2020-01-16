@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PharmacyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Drug">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="DrugCount" Type="Int32" />
+    <Property Name="TypeId" Type="Int32" />
+    <NavigationProperty Name="DrugType" Relationship="Self.FK__Drugs__TypeId__286302EC" FromRole="Drugs" ToRole="DrugTypes" />
+    <Property Name="Deleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="SellDrugs" Relationship="PharmacyModel.FK__SellDrug__DrugId__403A8C7D" FromRole="Drug" ToRole="SellDrug" />
+  </EntityType>
+  <EntityType Name="DrugType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Drugs" Relationship="Self.FK__Drugs__TypeId__286302EC" FromRole="DrugTypes" ToRole="Drugs" />
+    <Property Name="Deleted" Type="Boolean" />
+  </EntityType>
+  <Association Name="FK__Drugs__TypeId__286302EC">
+    <End Role="DrugTypes" Type="Self.DrugType" Multiplicity="0..1" />
+    <End Role="Drugs" Type="Self.Drug" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DrugTypes">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Drugs">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PharmacyEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Drugs" EntityType="Self.Drug" />
+    <EntitySet Name="DrugTypes" EntityType="Self.DrugType" />
+    <AssociationSet Name="FK__Drugs__TypeId__286302EC" Association="Self.FK__Drugs__TypeId__286302EC">
+      <End Role="DrugTypes" EntitySet="DrugTypes" />
+      <End Role="Drugs" EntitySet="Drugs" />
+    </AssociationSet>
+    <EntitySet Name="Employees" EntityType="PharmacyModel.Employee" />
+    <EntitySet Name="Sales" EntityType="PharmacyModel.Sale" />
+    <EntitySet Name="SellDrugs" EntityType="PharmacyModel.SellDrug" />
+    <AssociationSet Name="FK__SellDrug__DrugId__403A8C7D" Association="PharmacyModel.FK__SellDrug__DrugId__403A8C7D">
+      <End Role="Drug" EntitySet="Drugs" />
+      <End Role="SellDrug" EntitySet="SellDrugs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Sales__EmployeeI__3C69FB99" Association="PharmacyModel.FK__Sales__EmployeeI__3C69FB99">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Sale" EntitySet="Sales" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SellDrug__SaleId__3F466844" Association="PharmacyModel.FK__SellDrug__SaleId__3F466844">
+      <End Role="Sale" EntitySet="Sales" />
+      <End Role="SellDrug" EntitySet="SellDrugs" />
+    </AssociationSet>
+    <EntitySet Name="GetSales" EntityType="PharmacyModel.GetSale" />
+  </EntityContainer>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+    <Property Name="Confirmed" Type="Boolean" Nullable="false" />
+    <Property Name="Deleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Sales" Relationship="PharmacyModel.FK__Sales__EmployeeI__3C69FB99" FromRole="Employee" ToRole="Sale" />
+  </EntityType>
+  <EntityType Name="Sale">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Time" Type="DateTime" Precision="0" />
+    <Property Name="Total" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="EmployeeId" Type="Int32" />
+    <NavigationProperty Name="Employee" Relationship="PharmacyModel.FK__Sales__EmployeeI__3C69FB99" FromRole="Sale" ToRole="Employee" />
+    <NavigationProperty Name="SellDrugs" Relationship="PharmacyModel.FK__SellDrug__SaleId__3F466844" FromRole="Sale" ToRole="SellDrug" />
+  </EntityType>
+  <EntityType Name="SellDrug">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SaleId" Type="Int32" />
+    <Property Name="DrugId" Type="Int32" />
+    <Property Name="DrugCount" Type="Int32" />
+    <NavigationProperty Name="Drug" Relationship="PharmacyModel.FK__SellDrug__DrugId__403A8C7D" FromRole="SellDrug" ToRole="Drug" />
+    <NavigationProperty Name="Sale" Relationship="PharmacyModel.FK__SellDrug__SaleId__3F466844" FromRole="SellDrug" ToRole="Sale" />
+  </EntityType>
+  <Association Name="FK__SellDrug__DrugId__403A8C7D">
+    <End Type="PharmacyModel.Drug" Role="Drug" Multiplicity="0..1" />
+    <End Type="PharmacyModel.SellDrug" Role="SellDrug" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Drug">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SellDrug">
+        <PropertyRef Name="DrugId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Sales__EmployeeI__3C69FB99">
+    <End Type="PharmacyModel.Employee" Role="Employee" Multiplicity="0..1" />
+    <End Type="PharmacyModel.Sale" Role="Sale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Sale">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SellDrug__SaleId__3F466844">
+    <End Type="PharmacyModel.Sale" Role="Sale" Multiplicity="0..1" />
+    <End Type="PharmacyModel.SellDrug" Role="SellDrug" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sale">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SellDrug">
+        <PropertyRef Name="SaleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="GetSale">
+    <Key>
+      <PropertyRef Name="Invoice" />
+      <PropertyRef Name="Name" />
+      <PropertyRef Name="Email" />
+    </Key>
+    <Property Name="Invoice" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Total" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Time" Type="DateTime" Precision="0" />
+  </EntityType>
+</Schema>
